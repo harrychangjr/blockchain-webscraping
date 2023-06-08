@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+st.set_page_config(page_title="Blockchain Analysis - Original Datasets", page_icon = "🖥️", layout = "centered", initial_sidebar_state = "auto")
+
+
 coinGeckoAggregateFlat = pd.read_csv("original_files/coinGeckoAggregateFlat.csv") #given
 coinGeckoTweets = pd.read_csv("original_files/coinGeckoTweets.csv") #scraped
 coinMarketCapAggregateFlat = pd.read_csv("original_files/coinGeckoTweets.csv") #given
