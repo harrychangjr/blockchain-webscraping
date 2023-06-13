@@ -12,9 +12,10 @@ soup = BeautifulSoup(response.content, "html.parser")
 
 articles = soup.find_all("div", class_="article")
 
+st.write(articles)
+
 for article in articles:
     title_element = article.find("h2", class_="title")
     title = title_element.text.strip()
     st.write(title)
 
-st.write(articles)
