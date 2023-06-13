@@ -2,7 +2,7 @@ import streamlit as st
 import snscrape.modules.twitter as sntwitter
 import pandas as pd
 
-st.set_page_config(page_title="Blockchain Analysis - Scraper", page_icon = "🖥️", layout = "centered", initial_sidebar_state = "auto")
+st.set_page_config(page_title="Blockchain Analysis - Twitter Scraper", page_icon = "🖥️", layout = "centered", initial_sidebar_state = "auto")
 
 def scrape(usernames, path):
 
