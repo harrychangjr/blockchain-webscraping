@@ -61,24 +61,50 @@ def scrape1(usernames, path): #chatgpt
 
     return df
 
-st.subheader("CoinGecko")
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
 
-cg10 = pd.read_csv('original_files/coinGeckoAggregateFlat.csv')['links_twitter_screen_name'].dropna()[:10]
-st.write("**Top 10 Coins - CoinGecko**")
-st.write(cg10)
+tab1, tab2 = st.tabs(["CoinGecko", "CoinMarketCap"])
 
-if st.button('Scrape Data from CoinGecko'):
-    scrape1(list(cg10), 'coinGeckoTweets_scraped.csv')
-    coinGeckoTweets_scraped = pd.read_csv('coinGeckoTweets_scraped.csv')
-    st.write(coinGeckoTweets_scraped)
+with tab1:
+    st.subheader("CoinGecko")
 
-st.subheader("CoinMarketCap")
+    cg10 = pd.read_csv('original_files/coinGeckoAggregateFlat.csv')['links_twitter_screen_name'].dropna()[:10]
+    st.write("**Top 10 Coins - CoinGecko**")
+    st.write(cg10)
 
-cmc10 = pd.read_csv('original_files/coinMarketCapAggregateFlat.csv')['data_twitter_username'].dropna()[:10]
-st.write("**Top 10 Coins - CoinMarketCap**")
-st.write(cmc10)
+    if st.button('Scrape Data from CoinGecko'):
+        scrape1(list(cg10), 'coinGeckoTweets_scraped.csv')
+        coinGeckoTweets_scraped = pd.read_csv('coinGeckoTweets_scraped.csv')
+        st.write(coinGeckoTweets_scraped)
+        #converting the sample dataframe
+        csv = convert_df(coinGeckoTweets_scraped)
+        #adding a download button to download csv file
+        st.download_button( 
+        label="Download data as CSV",
+        data=csv,
+        file_name='coinGeckoTweets_scraped.csv',
+        mime='text/csv',
+    )
 
-if st.button('Scrape Data from CoinMarketCap'):
-    scrape1(list(cmc10), 'coinMarketCapTweets_scraped.csv')
-    coinMarketCapTweets_scraped = pd.read_csv('coinMarketCap_scraped.csv')
-    st.write(coinMarketCap_scraped)
+with tab2:
+    st.subheader("CoinMarketCap")
+
+    cmc10 = pd.read_csv('original_files/coinMarketCapAggregateFlat.csv')['data_twitter_username'].dropna()[:10]
+    st.write("**Top 10 Coins - CoinMarketCap**")
+    st.write(cmc10)
+
+    if st.button('Scrape Data from CoinMarketCap'):
+        scrape1(list(cmc10), 'coinMarketCapTweets_scraped.csv')
+        coinMarketCapTweets_scraped = pd.read_csv('coinMarketCapTweets_scraped.csv')
+        st.write(coinMarketCapTweets_scraped)
+        #converting the sample dataframe
+        csv = convert_df(coinMarketCapTweets_scraped)
+        #adding a download button to download csv file
+        st.download_button( 
+        label="Download data as CSV",
+        data=csv,
+        file_name='coinMarketCapTweets_scraped.csv',
+        mime='text/csv',
+    )
