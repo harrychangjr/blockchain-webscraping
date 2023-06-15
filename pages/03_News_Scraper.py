@@ -12,12 +12,14 @@ st.set_page_config(page_title="Blockchain Analysis - News Scraper", page_icon = 
 
 st.header("News Scraper")
 
-tab1, tab2 = st.tabs(["blockchain.news", "TBD"])
+tab1, tab2 = st.tabs(["blockchain.news - Main Page", "blockchain.news - Sub-Pages"])
 
 with tab1:
 
     st.subheader("https://blockchain.news")
 
+
+    ### MAIN PAGE SCRAPER
     url = "https://blockchain.news"
     response = requests.get(url)
 
@@ -133,5 +135,72 @@ with tab1:
 
 
 with tab2:
-    st.subheader("TBD")
+    st.subheader("blockchain.news - Sub-Pages")
+    def scrape_data(url):
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+        articles = soup.find_all("div", class_="col-xl-8half col-xl-8 col-7")
+        st.write(articles)
+
+        data = []
+
+        for article in articles:
+            title_element = article.find("strong")
+            title = title_element.text.strip() if title_element else None
+
+            
+            link_element = article.find('a')
+            link = link_element['href'] if link_element else None
+            link = url + link if link_element else None
+
+            data.append({'Title': title, 'Link': link})
+
+            #if link:
+                #article_response = requests.get(link)
+                #if article_response.ok:
+                    #article_soup = BeautifulSoup(article_response.content, 'html.parser')
+                    #author = article_soup.find('span', id="author")
+                    #author_clean = author.text.strip() if author else None
+                    #author_cleaned = author_clean.replace(" ", "-") if author_clean else None
+                    #author_url = url + "/Profile/" + author_cleaned if author_cleaned else None
+
+                    #date_element = article.find('time')
+                    #date = date_element['datetime'] if date_element else None
+                    #time = date_element.text.strip() if date_element else None
+
+                    #content = article_soup.find("div", class_="textbody")
+                    #content = content.get_text() if content else None
+
+                    #if author_url:
+                        #profile_response = requests.get(author_url)
+                        #if profile_response.ok:
+                            #profile_soup = BeautifulSoup(profile_response.content, 'html.parser')
+                            #profile = profile_soup.find("div", class_="profile-user-desc")
+                            #profile = profile.get_text() if profile else None
+
+                            #data.append({'Title': title
+                            #, 'Link': link
+                            #, 'Date': date
+                            #, 'Time': time
+                            #, 'Author': author_clean
+                            #, 'Author URL': author_url
+                            #, 'Author Profile': profile
+                            #, 'Content': content
+                            #})
+
+        return data
+    
+    subpage_data = scrape_data("https://blockchain.news/analysis")
+
+    st.write(subpage_data)
+
+    # Convert the list of dictionaries into a Pandas DataFrame
+    df = pd.DataFrame(subpage_data)
+
+    # Remove rows with None values for both title and link
+    # df = df.dropna(subset=['Title', 'Link'], how='all')
+
+    # Print the DataFrame
+    AgGrid(df)  
+    #st.write(df) 
 
