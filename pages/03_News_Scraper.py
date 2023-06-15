@@ -55,8 +55,22 @@ for article in articles:
             # Extract the text content of the time tag (date and time)
             time = date_element.text.strip() if date_element else None
 
-            # Add the data to the list
-            data.append({'Title': title, 'Link': link, 'Date': date, 'Time': time, 'Author': author_clean, 'Author URL': author_url})
+            
+
+            if author_url:
+                # Send an HTTP GET request to the article link
+                profile_response = requests.get(author_url)
+
+                if profile_response.ok:
+                    profile_soup = BeautifulSoup(profile_response.content, 'html.parser')
+
+                    # Find the element containing the author profile
+                    profile = profile_soup.find("div", class_="profile-user-desc")
+                    profile = profile.get_text() if profile else None
+
+                    # Add the data to the list
+                    data.append({'Title': title, 'Link': link, 'Date': date, 'Time': time, 
+                    'Author': author_clean, 'Author URL': author_url, 'Author Profile': profile})
 
 
     # Add the data to the list
@@ -70,4 +84,17 @@ df = df.dropna(subset=['Title', 'Link'], how='all')
 
 # Print the DataFrame
 AgGrid(df)
+
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
+
+csv = convert_df(df)
+# adding a download button to download csv file
+st.download_button( 
+    label="Download data as CSV",
+    data=csv,
+    file_name='BlockchainNews.csv',
+    mime='text/csv',
+)
 
