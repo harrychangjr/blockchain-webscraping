@@ -104,6 +104,34 @@ with tab1:
         mime='text/csv',
     )
 
+# other pages to scrape
+# /tag/Cryptocurrency/0 to xxx
+# /tag/Bitcoin/0 to xxx
+# /tag/Bitcoin-price/0 to xxx
+# /tag/Ethereum/0 to xxx
+# /tag/Cardano/0 to xxx
+# /tag/Ripple/0 to xxx
+# /tag/Stablecoin/0 to xxx
+# /tag/CBDC/0 to xxx
+# /tag/DeFi/0 to xxx
+# /NFT/0 to xxx
+# /tag/regulation/0 to xxx
+# /tag/legal/0 to xxx
+# /tag/regulation/0 to xxx
+# /tag/legal/0 to xxx
+# /tag/cybercrime/0 to xxx
+# /tag/industry/0 to xxx
+# /tag/exchanges/0 to xxx
+# /tag/mining/0 to xxx
+# /tag/Data-Service/0 to xxx
+# /tag/technology/0 to xxx
+# /tag/Enterprise/0 to xxx
+# /tag/exchanges/0 to xxx
+# /tag/Blockchain-Application/0 to xxx
+# analysis, interview, wiki, price, learn, press%20release, opinion, prnewswire
+
+
+
 with tab2:
     st.subheader("TBD")
 
