@@ -64,7 +64,7 @@ with tab1:
 
                 # Extract the body content of the article
                 content = article_soup.find("div", class_="textbody")
-                content = content.get_text() if content else None
+                content = content.text.strip() if content else None
 
                 if author_url:
                     # Send an HTTP GET request to the article link
