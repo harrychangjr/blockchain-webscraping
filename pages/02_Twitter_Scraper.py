@@ -4,6 +4,8 @@ import pandas as pd
 
 st.set_page_config(page_title="Blockchain Analysis - Twitter Scraper", page_icon = "🖥️", layout = "centered", initial_sidebar_state = "auto")
 
+st.header("Twitter Scraper")
+
 def scrape(usernames, path):
 
     tweets = []
