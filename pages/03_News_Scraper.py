@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+from st_aggrid import AgGrid
 
 st.set_page_config(page_title="Blockchain Analysis - News Scraper", page_icon = "🖥️", layout = "centered", initial_sidebar_state = "auto")
 
@@ -19,6 +20,7 @@ st.write(articles)
 data = []
 
 for article in articles:
+    # Extract the title
     title_element = article.find("a", class_="post-title") or article.find("h1", class_="post-title")
     title = title_element.text.strip() if title_element else None
     
@@ -27,8 +29,38 @@ for article in articles:
     link = link_element['href'] if link_element else None
     link = url + link if link_element else None
 
+    # Extract the date
+    #date_element = article.find('time')
+    #date = date_element['datetime'] if date_element else None
+
+    if link:
+        # Send an HTTP GET request to the article link
+        article_response = requests.get(link)
+        
+        if article_response.ok:
+            article_soup = BeautifulSoup(article_response.content, 'html.parser')
+            
+            # Find the element containing the article content
+            author = article_soup.find('span', id="author")
+            author_clean = author.text.strip() if author else None
+
+            # Extract author URL
+            author_cleaned = author_clean.replace(" ", "-") if author_clean else None
+            author_url = url + "/Profile/" + author_cleaned if author_cleaned else None
+
+            # Extract the date
+            date_element = article.find('time')
+            date = date_element['datetime'] if date_element else None
+
+            # Extract the text content of the time tag (date and time)
+            time = date_element.text.strip() if date_element else None
+
+            # Add the data to the list
+            data.append({'Title': title, 'Link': link, 'Date': date, 'Time': time, 'Author': author_clean, 'Author URL': author_url})
+
+
     # Add the data to the list
-    data.append({'Title': title, 'Link': link})
+   #data.append({'Title': title, 'Link': link, 'Date': date, 'Time': time, 'Content': article_content})
 
 # Convert the list of dictionaries into a Pandas DataFrame
 df = pd.DataFrame(data)
@@ -37,5 +69,5 @@ df = pd.DataFrame(data)
 df = df.dropna(subset=['Title', 'Link'], how='all')
 
 # Print the DataFrame
-st.write(df)
+AgGrid(df)
 
