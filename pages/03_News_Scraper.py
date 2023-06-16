@@ -33,7 +33,7 @@ with tab1:
 
     articles = soup.find_all("div", class_="blog-content")
 
-    st.write(articles)
+    #st.write(articles)
 
     # Create a list to store the scraped data
     data = []
@@ -143,15 +143,15 @@ with tab1:
 
 with tab2:
     st.subheader("blockchain.news - Sub-Pages (selected)")
-    st.write("Applies for *Analysis, Interview, Wiki, Press Release, Opinion, PRNewswire* sections only")
+    st.write("Applies for *NFT, Analysis, Interview, Wiki, Press Release, Opinion, PRNewswire* sections only")
 
     ### SUB PAGE SCRAPER
-    ### analysis, interview, wiki, learn, press%20release, opinion, prnewswire
+    ### nft, analysis, interview, wiki, learn, press%20release, opinion, prnewswire
     def scrape_data(url):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
         articles = soup.find_all("div", class_="col-xl-8half col-xl-8 col-7")
-        st.write(articles)
+        #st.write(articles)
 
         data = []
 
@@ -228,9 +228,22 @@ with tab2:
 
         return data
     
-    subpage_data = scrape_data("https://blockchain.news/wiki")
+    # Dropdown list to select the section
+    section = st.selectbox("Select a section to scrape", ["NFT", "Analysis", "Interview", "Wiki", "Press Release", "Opinion", "PRNewswire"])
 
-    st.write(subpage_data)
+    # Handle the "Press Release" section URL
+    if section == "Press Release":
+        section_url = "press%20release"
+    else:
+        section_url = section.lower().replace(' ', '-')
+
+    # URL based on the selected section
+    url = f"https://blockchain.news/{section_url}"
+    st.subheader(url)
+
+    # Scrape data for the selected section
+    subpage_data = scrape_data(url)
+    #st.write(subpage_data)
 
     # Convert the list of dictionaries into a Pandas DataFrame
     df = pd.DataFrame(subpage_data)
