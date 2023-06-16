@@ -145,41 +145,70 @@ with tab2:
         data = []
 
         for article in articles:
+            # Extract the title
             title_element = article.find("strong")
             title = title_element.text.strip() if title_element else None
 
-            
+            # Extract the link
             link_element = article.find('a')
             link = link_element['href'] if link_element else None
             link = url + link if link_element else None
 
-            data.append({'Title': title, 'Link': link})
+            # Extract the date
+            date_element = article.find('font', class_="post-desc")
+            date = date_element.text.strip() if date_element else None
+            #time = date_element.text.strip() if date_element else None
 
+            # Extract the time
+            
+            # Extract the author name
+            author_element = article.find("div", class_="col-6 align-left").find("a")
+            author_name = author_element.text.strip() if author_element else None
+
+            # Extract the author link
+            author_url = author_element["href"] if author_element else None
+            author_url = "https://blockchain.news" + author_url
+            # Extract the author profile
+
+            data.append({'Title': title, 'Link': link, 'Date': date, 'Author': author_name,
+            'Author URL': author_url})
             #if link:
                 #article_response = requests.get(link)
+                #st.write(article_response.content)
+                #st.write(":)")
+                #article_soup = BeautifulSoup(article_response.content, 'html.parser')
+            #author = article_soup.find('span', id="author")
+            #st.write(author)
+            #author_clean = author.text.strip() if author else None
+            #data.append({'Title': title, 'Link': link, 'Author': author_clean})
+
+            #if link:
+                # Send an HTTP GET request to the article link
+                #article_response = requests.get(link)
+
                 #if article_response.ok:
                     #article_soup = BeautifulSoup(article_response.content, 'html.parser')
+
                     #author = article_soup.find('span', id="author")
                     #author_clean = author.text.strip() if author else None
-                    #author_cleaned = author_clean.replace(" ", "-") if author_clean else None
-                    #author_url = url + "/Profile/" + author_cleaned if author_cleaned else None
+            #author_cleaned = author_clean.replace(" ", "-") if author_clean else None
+            #author_url = url + "/Profile/" + author_cleaned if author_cleaned else None
 
-                    #date_element = article.find('time')
-                    #date = date_element['datetime'] if date_element else None
-                    #time = date_element.text.strip() if date_element else None
+            #date_element = article.find('time')
+            #date = date_element['datetime'] if date_element else None
+            #time = date_element.text.strip() if date_element else None
 
-                    #content = article_soup.find("div", class_="textbody")
-                    #content = content.get_text() if content else None
+            #content = article_soup.find("div", class_="textbody")
+            #content = content.get_text() if content else None
 
-                    #if author_url:
-                        #profile_response = requests.get(author_url)
-                        #if profile_response.ok:
-                            #profile_soup = BeautifulSoup(profile_response.content, 'html.parser')
-                            #profile = profile_soup.find("div", class_="profile-user-desc")
-                            #profile = profile.get_text() if profile else None
+            #if author_url:
+                #profile_response = requests.get(author_url)
+                #if profile_response.ok:
+                    #profile_soup = BeautifulSoup(profile_response.content, 'html.parser')
+                    #profile = profile_soup.find("div", class_="profile-user-desc")
+                    #profile = profile.get_text() if profile else None
 
-                            #data.append({'Title': title
-                            #, 'Link': link
+                    #data.append({'Title': title, 'Link': link, 'Author': author_clean})
                             #, 'Date': date
                             #, 'Time': time
                             #, 'Author': author_clean
