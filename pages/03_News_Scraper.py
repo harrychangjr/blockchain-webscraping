@@ -18,7 +18,7 @@ st.set_page_config(page_title="Blockchain Analysis - News Scraper", page_icon = 
 
 st.header("News Scraper")
 
-tab1, tab2 = st.tabs(["blockchain.news - Main Page", "blockchain.news - Sub-Pages"])
+tab1, tab2 = st.tabs(["blockchain.news - Main Page", "blockchain.news - Sub-Pages (selected)"])
 
 with tab1:
 
@@ -137,12 +137,16 @@ with tab1:
 # /tag/Enterprise/0 to xxx
 # /tag/exchanges/0 to xxx
 # /tag/Blockchain-Application/0 to xxx
-# analysis, interview, wiki, price, learn, press%20release, opinion, prnewswire
+
 
 
 
 with tab2:
-    st.subheader("blockchain.news - Sub-Pages")
+    st.subheader("blockchain.news - Sub-Pages (selected)")
+    st.write("Applies for *Analysis, Interview, Wiki, Press Release, Opinion, PRNewswire* sections only")
+
+    ### SUB PAGE SCRAPER
+    ### analysis, interview, wiki, learn, press%20release, opinion, prnewswire
     def scrape_data(url):
         response = requests.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
@@ -224,7 +228,7 @@ with tab2:
 
         return data
     
-    subpage_data = scrape_data("https://blockchain.news/analysis")
+    subpage_data = scrape_data("https://blockchain.news/wiki")
 
     st.write(subpage_data)
 
@@ -238,3 +242,11 @@ with tab2:
     AgGrid(df)  
     #st.write(df) 
 
+    csv = convert_df(df)
+    # adding a download button to download csv file
+    st.download_button( 
+        label="Download data as CSV",
+        data=csv,
+        file_name='BlockchainNews_analysis.csv',
+        mime='text/csv',
+    )
